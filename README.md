@@ -46,6 +46,10 @@ node app.js --help
     --base <dir>               Base directory
 ```
 
+## Related Projects
+*** ***
+[_MCC Command Line Client_](https://github.com/MovingCloudChain/mcc-client)
+[_MCC Documentation_](https://github.com/MovingCloudChain/mcc-docs)
 
 ## License
 
