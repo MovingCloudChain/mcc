@@ -5,13 +5,15 @@
 readonly INIT_DIR=$(readlink -m $(dirname $0))
 
 function add_cron() {
-	cnt=`cat /etc/crontab | grep 'mcc_monitor' | grep -v '#' | wc -l`
-	if [ $cnt -eq 0 ];then
-		echo "*/1 * * * * root $INIT_DIR/mcc_monitor.sh" >> /etc/crontab
-		if [ $? -ne 0 ];then
-			echo "Add mcc_monitor crontab err, please add it manually!" && exit 2
-		fi
-	fi
+$ct_file="/etc/crontab"
+
+if [ -f "$ct_file" ] && grep -q "mcc_monitor" "$ct_file"; then
+        echo "Add mcc_monitor crontab err, please add it manually!" && exit 2;
+        elif [ ! -f "$testf" ]; then echo "Error:  /etc/crontab Does not exist!" && exit 2;
+	else
+        echo "*/1 **** root $INIT_DIR/mcc_monitor.sh" >> "$ct_file";
+fi
+
 }
 
 function main() {
