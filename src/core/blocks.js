@@ -1184,7 +1184,7 @@ Blocks.prototype.generateBlock = function (keypair, timestamp, cb) {
             library.logger.error("Failed to verify transaction " + transaction.id, err);
             modules.transactions.removeUnconfirmedTransaction(transaction.id);
           } else {
-            ready.push(transaction);
+              ready.push(transaction);
           }
           next();
         });

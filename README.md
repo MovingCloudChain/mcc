@@ -1,4 +1,4 @@
-# Moving Cloud Chain 行云链(xíngyúnliàn) 
+# mcc
 
 MCC system is a decentralized application platform, which is designed to lower the threshold for developers, such as using JavaScript as develop language, supporting relational database to save transaction data, and making DAPP development be similar with traditional Web application. It is sure that these characteristics are very attractive to developers and SMEs. The ecosystem of the whole platform cannot be improved until developers make a huge progress on productivity. Also, MCC platform is designed to be open for various fields, not limited to some particular parts such as finance, file storage, or copyright proof. It provides underlying and abstract API which can be combined freely to create different types of applications. In consensus mechanism, MCC inherits and enhances DPOS algorithm, by which the possibility of forks and risk of duplicate payments would be significantly reduced. Furthermore, MCC sidechain mode not only can mitigate the pressure of blockchain expansion, but also make DAPP more flexible and personal. MCC system, as a proactive, low-cost and full stack solution, will surely be a next generation incubator of decentralized applications.
 
@@ -46,14 +46,16 @@ node app.js --help
     --base <dir>               Base directory
 ```
 
-## Related Projects
-*** ***
-[_MCC Command Line Client_](https://github.com/MovingCloudChain/mcc-client)
-[_MCC Documentation_](https://github.com/MovingCloudChain/mcc-docs)
 
 ## License
 
-Copyright 2017 区块链（深圳）研究开发中心 Shenzhen Blockchain Research and Development Center
+The MIT License (MIT)
+
+Copyright 2017 行云科技 All Rights Reserved.</br>
+Copyright (c) 2016 Asch</br>
+Copyright (c) 2015 Crypti
+
+
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

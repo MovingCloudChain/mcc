@@ -326,7 +326,7 @@ private.list = function (filter, cb) {
   } else if (filter.ownerAddress) {
     if (filter.ownerAddress != 'undefined') {
       params.ownerAddress = filter.ownerAddress;
-      owner = '(t.senderId = ' + params.ownerAddress + ' or t.recipientId = ' + params.ownerAddress + ')';
+      owner = '(t.senderId = \'' + params.ownerAddress + '\' or t.recipientId = \'' + params.ownerAddress + '\')';
     }
   }
   if (filter.type >= 0) {
@@ -374,7 +374,7 @@ private.list = function (filter, cb) {
     "from trs t " +
     "inner join blocks b on t.blockId = b.id " +
     (fields_or.length || owner ? "where " : "") + " " +
-    (fields_or.length ? "(" + fields_or.join(' and ') + ") " : "") + (fields_or.length && owner ? " and " + owner : owner), params, {"count": Number}, function (err, rows) {
+    (fields_or.length ? "(" + fields_or.join(' or ') + ") " : "") + (fields_or.length && owner ? " and " + owner : owner), params, {"count": Number}, function (err, rows) {
     if (err) {
       return cb(err);
     }
@@ -385,7 +385,7 @@ private.list = function (filter, cb) {
       "from trs t " +
       "inner join blocks b on t.blockId = b.id " + uiaCurrencyJoin +
       (fields_or.length || owner ? "where " : "") + " " +
-      (fields_or.length ? "(" + fields_or.join(' and ') + ") " : "") + (fields_or.length && owner ? " and " + owner : owner) + " " +
+      (fields_or.length ? "(" + fields_or.join(' or ') + ") " : "") + (fields_or.length && owner ? " and " + owner : owner) + " " +
       (filter.orderBy ? 'order by ' + sortBy + ' ' + sortMethod : '') + " " +
       (filter.limit ? 'limit $limit' : '') + " " +
       (filter.offset ? 'offset $offset' : ''), params, ['t_id', 'b_height', 't_blockId', 't_type', 't_timestamp', 't_senderPublicKey', 't_senderId', 't_recipientId', 't_amount', 't_fee', 't_signature', 't_signSignature', 't_signatures', 'confirmations'], function (err, rows) {
@@ -634,9 +634,18 @@ Transactions.prototype.onBind = function (scope) {
   modules = scope;
 }
 
+var keyList = ['blockId', 'limit',
+            'type', 'orderBy', 'offset',
+            'senderPublicKey',
+            'senderPublicKey','ownerPublicKey',
+            'ownerAddress', 'senderId',
+            'recipientId', 'amount',
+            'fee', 'uia', 'currency'];
 // Shared
 shared.getTransactions = function (req, cb) {
   var query = req.body;
+  var params = {};
+
   library.scheme.validate(query, {
     type: "object",
     properties: {
@@ -680,7 +689,7 @@ shared.getTransactions = function (req, cb) {
       amount: {
         type: "integer",
         minimum: 0,
-        maximum: constants.fixedPoint
+        maximum: 1.8 * constants.fixedPoint
       },
       fee: {
         type: "integer",
@@ -700,10 +709,27 @@ shared.getTransactions = function (req, cb) {
     }
   }, function (err) {
     if (err) {
+      console.log(err);
       return cb(err[0].message);
     }
+    var names = Object.keys(query);
+    for (var i = 0; i< names.length; ++i ) {
+      var key = names[i];
+      if (keyList.includes(key) && query[key] != undefined && query[key] != '') {
+        params[key] = query[key];
+      }
+    }
 
-    private.list(query, function (err, data) {
+    if (params.limit == undefined || params.offset == undefined) {
+      delete params.limit ;
+      delete params.offset;
+    }
+    if (params.limit == undefined) {
+      params.limit = 20;
+      params.offset = 0;
+    }
+
+    private.list(params, function (err, data) {
       if (err) {
         return cb("Failed to get transactions");
       }

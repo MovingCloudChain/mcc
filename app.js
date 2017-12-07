@@ -109,10 +109,6 @@ function main() {
 
   if (appConfig.netVersion === 'mainnet') {
     var seeds = [
-      2018271543,
-      1966130276,
-      1966130295,
-      1966130296
     ];
     var ip = require('ip');
     for (var i = 0; i < seeds.length; ++i) {

@@ -435,7 +435,6 @@ private.getBlockSlotData = function (slot, height, cb) {
       var delegate_pos = currentSlot % slots.delegates;
 
       var delegate_id = activeDelegates[delegate_pos];
-
       if (delegate_id && private.keypairs[delegate_id]) {
         return cb(null, {time: slots.getSlotTime(currentSlot), keypair: private.keypairs[delegate_id]});
       }
@@ -462,12 +461,12 @@ private.loop = function (cb) {
   var currentSlot = slots.getSlotNumber();
   var lastBlock = modules.blocks.getLastBlock();
 
-  if (currentSlot == slots.getSlotNumber(lastBlock.timestamp)) {
+  if (currentSlot == slots.getSlotNumber(lastBlock.timestamp)) {//时间没到
     // library.logger.debug('Loop:', 'lastBlock is in the same slot');
     return setImmediate(cb);
   }
   
-  if (Date.now() % 10000 > 5000) {
+  if (Date.now() % 10000 > 5000) { //整点发起?
     library.logger.trace('Loop:', 'maybe too late to collect votes');
     return setImmediate(cb);
   }
@@ -563,7 +562,8 @@ Delegates.prototype.generateDelegateList = function (height, cb) {
     if (err) {
       return cb(err);
     }
-    var seedSource = modules.round.calc(height).toString();
+    var seedSource = modules.round.calc(height).toString(); //每一轮第一个随机值都是一样的
+    // 所有的每一轮顺序都是固定的它是一个hash了 delegate length(101) * 4 次的过程,
 
     var currentSeed = crypto.createHash('sha256').update(seedSource, 'utf8').digest();
     for (var i = 0, delCount = truncDelegateList.length; i < delCount; i++) {

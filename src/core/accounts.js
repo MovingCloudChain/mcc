@@ -305,11 +305,7 @@ Accounts.prototype.setAccountAndGet = function (data, cb) {
   var address = data.address || null;
   if (address === null) {
     if (data.publicKey) {
-      address = self.generateAddressByPublicKey(data.publicKey);
-
-      if (!data.isGenesis && !library.balanceCache.getNativeBalance(address)) {
-        address = addressHelper.generateBase58CheckAddress(data.publicKey);
-      }
+      address = addressHelper.generateBase58CheckAddress(data.publicKey);
       delete data.isGenesis;
     } else {
       return cb("Missing address or public key");
